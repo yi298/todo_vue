@@ -10,8 +10,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/index.css" />
-    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
-    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="js/global.js"></script>
   </head>
@@ -28,8 +27,17 @@
         <div class="row">
           <div class="col-sm-12">
             <ul class="list-group" id="todoes">
-              <li class="list-group-item" v-for=" todo in todoes">
-                {{ todo.time }}_{{todo.content}}
+              <li
+                class="list-group-item"
+                v-for=" todo in todoes"
+                :class=
+                  'todo.statu==0?"list-group-item":
+                   todo.statu==1?"list-group-item-info":
+                   todo.statu==2?"list-group-item-success":
+                   ""'
+                @click="changeTodoStatu(todo)"
+              >
+                {{ todo.time }}_{{ todo.content }}
               </li>
             </ul>
           </div>
@@ -38,21 +46,36 @@
       <!-- 内容栏 结束 -->
     </div>
   </body>
+  <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+  <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
   <script>
     new Vue({
       el: "#app",
       data: {
         todoes: [
-          { time: "2019-03-21 20:10", content: "已完成"},
-          { time: "2019.03.21 20:10", content: "进行中"},
-          { time: "2019.03.21 20:10", content: "未开始"}
+          { time: "2019-03-21 20:10", content: "已完成", statu: 2 },
+          { time: "2019.03.21 20:10", content: "进行中", statu: 1 },
+          { time: "2019.03.21 20:10", content: "未开始", statu: 0 }
         ],
         todo: ""
       },
       methods: {
+        // 输入栏添加新任务
         addTodo() {
-          this.todoes.push({time:new Date().fmt('yyyy-MM-dd hh:mm'),content:this.todo});
+          this.todoes.push({
+            time: new Date().fmt("yyyy-MM-dd hh:mm"),
+            content: this.todo
+          });
           this.todo = "";
+        },
+        // 点击改变任务状态
+        changeTodoStatu(todo){
+          console.log(todo); // 点击获取内容todo
+          if(todo.statu==0){
+            todo.statu=1;
+          }else if(todo.statu==1){
+            todo.statu=2;
+          }
         }
       }
     });
