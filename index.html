@@ -18,8 +18,8 @@
   <body>
     <div id="app">
       <!-- 输入栏 -->
-      <input type="text" v-model="todo" />
-      <input type="button" value="新增任务" @click="addTodo" />
+      <!-- <input type="text" v-model="todo" /> -->
+      <input type="button" value="新增任务" @click="showAddTodoModal" />
       <!-- 输入栏 结束 -->
 
       <!-- 内容栏 -->
@@ -43,8 +43,91 @@
         </div>
       </div>
       <!-- 内容栏 结束 -->
+
+      <!-- 添加任务的模态框 -->
+      <div
+        class="modal fade todo"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" id="exampleModalLabel">添加新任务</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="message-text" class="control-label">添加任务内容:</label>
+                <textarea class="form-control" id="todo" v-model="todo"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                取消
+              </button>
+              <button type="button" class="btn btn-primary" id="addTodo" @click="addTodo">确认</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 添加任务的模态框 结束 -->
+
+      <!-- 状态提醒模态框 -->
+      <div
+        class="modal fade"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="gridSystemModalLabel"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" id="gridSystemModalLabel">改变状态</h4>
+            </div>
+            <div class="modal-body">
+              弹框内容
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                取消
+              </button>
+              <button type="button" class="btn btn-primary">确定</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+      <!-- 状态提醒模态框 结束 -->
     </div>
   </body>
+
   <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
   <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
   <script>
@@ -57,7 +140,8 @@
           { time: "2019.03.21 20:10", content: "未开始", statu: 0 }
         ],
         todo: "",
-        status: {// 做一个状态的映射关系，状态为0时，要改变的状态是1
+        status: {
+          // 做一个状态的映射关系，状态为0时，要改变的状态是1
           0: 1,
           1: 2
         }
@@ -67,16 +151,24 @@
         addTodo() {
           this.todoes.push({
             time: new Date().fmt("yyyy-MM-dd hh:mm"),
-            content: this.todo
+            content: this.todo,
+            statu: 0
           });
           this.todo = "";
+          $('.todo').modal('hide');// 添加后隐藏模态框
         },
+
         // 点击改变任务状态
         changeTodoStatu(todo) {
           console.log(todo); // 点击获取内容todo
           if (this.status[todo.statu]) {
             todo.statu = this.status[todo.statu];
           }
+        },
+
+        // 点击新任务按钮，弹出模态框
+        showAddTodoModal(){
+          $('.todo').modal('show');
         }
       }
     });
